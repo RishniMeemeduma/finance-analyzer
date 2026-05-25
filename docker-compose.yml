@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: finance_analyzer_db
+    environment:
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance_dev_password
+      POSTGRES_DB: finance_analyzer
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

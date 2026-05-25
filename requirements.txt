@@ -1,0 +1,23 @@
+# Core
+python-dotenv==1.0.1
+pydantic==2.9.2
+pydantic-settings==2.6.1
+
+# Google APIs
+google-api-python-client==2.149.0
+google-auth-httplib2==0.2.0
+google-auth-oauthlib==1.2.1
+
+# Database
+psycopg[binary]==3.2.3
+sqlalchemy==2.0.36
+
+# AI
+anthropic==0.40.0
+
+# PDF
+pypdf==5.1.0
+pdfplumber==0.11.4
+
+# Dev
+ipython==8.29.0
