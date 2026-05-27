@@ -1,0 +1,33 @@
+invoice_number :* 000019*
+
+start_date: * 2026-03-01  *
+*end_date : 2026-03-31*
+
+description :   Consultancy activities for Revolv Space during March 2026
+were conducted across two principal workstreams, encompassing technical
+nonconformity assessment and test plan finalisation for the MARA programme.
+A nonconformity affecting a batch of MoS₂-coated MARA pinion gears was
+evaluated, wherein surface roughness values were found to exceed
+specification; one component was measured at Ra 0.519 µm against a target
+of Ra 0.1 µm, representing a fivefold deviation from ESA/ESTL
+recommendations. Technical risk posed by deploying the unidentifiable batch
+in Flight Models was assessed. A recommendation was issued on 31 March to
+retain the batch for use, with the condition that grease plating be applied
+a minimum of three times to ensure adequate lubricant provision. The
+rationale was established that fluid lubrication is less sensitive to
+surface roughness than dry-film coatings, and that grease would serve as
+the primary cold-welding preventative in the event of MoS₂ coating
+degradation. Hybrid lubrication behaviour of the system was reviewed to
+support this position. In parallel, the MARA Engineering Qualification
+Model test plan was completed and delivered on 16 March. Recommendations
+for initial condition measurements and tribological baselines, required to
+support a potential three-year service life extension, were incorporated.
+Updated experimental data  ncluding motor torque and EM twist capsule
+friction torque measurements  were received from the project team following
+a meeting held on 18 March and were integrated into the tribological
+analysis table. Coordination activities included multiple scheduling
+exchanges to align review meetings around the test plan and nonconformity
+discussions, with a session on 18 March confirmed with Diego Cremonesi to
+address updates in detail.
+
+ total_hours*: 15 hours*

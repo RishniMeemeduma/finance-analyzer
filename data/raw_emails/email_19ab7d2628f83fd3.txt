@@ -1,0 +1,8 @@
+This email address was just used to sign up for a Cloudflare account 
+
+If this was you, please verify your email below. 
+
+https://dash.cloudflare.com/email-verification?token=I3X8rNi3OBF-GZiuroxIl5HGpMVMH7PXdVJPzg_hrI2gGdtoN__C4Cs_h_8Y0CVNKV2x8TZYxnU7GzsYHT4opUEyH0S0yFxpkVMnJrqtIsYrEo53Cy3ccnkJ3HESsjESiVyJXau9QkfyYKC6PP-belkN_RWOhFF-g_nKpC8TbW0xPXGE_37thMtlrN0iumQveEQBRHyfAa8D8oBG78oQvIGQ8dk9eCXFn5eD3DeLiI35Ngvz7vhqCt_tNMBfy-oP
+
+Not you?
+Don’t worry. You can safely ignore this email. Your internet properties on this account (and any other Cloudflare accounts you own) are not at risk.

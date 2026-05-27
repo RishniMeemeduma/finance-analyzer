@@ -207,3 +207,97 @@ def count_documents_by_status(session: Session) -> dict[str, int]:
         Document.extraction_status
     )
     return {status: count for status, count in session.execute(stmt).all()}
+
+def create_manual_invoice(
+    session: Session,
+    *,
+    vendor_name: str,
+    total_amount: Decimal,
+    direction: str = "incoming",
+    invoice_date: date | None = None,
+    currency: str = "USD",
+    category: str | None = None,
+    is_recurring: bool = False,
+    invoice_number: str | None = None,
+    notes: str | None = None,
+) -> Invoice:
+    """Create an invoice manually (no source PDF/email)."""
+    import hashlib
+    import uuid
+
+    placeholder = f"manual:{uuid.uuid4()}"
+    content_hash = hashlib.sha256(placeholder.encode()).hexdigest()
+
+    label = (invoice_number or (invoice_date.isoformat() if invoice_date else "no-date"))
+    doc = Document(
+        source_type="manual",
+        source_id=placeholder,
+        file_path=f"manual/{vendor_name}/{label}",
+        content_hash=content_hash,
+        original_filename=f"manual_{vendor_name}_{label}.entry",
+        file_size_bytes=0,
+        mime_type="application/x-manual-entry",
+        extraction_status="success",
+        source_metadata={"notes": notes} if notes else {},
+    )
+    session.add(doc)
+    session.flush()
+
+    raw_extraction = {
+        "is_invoice": True,
+        "direction": direction,
+        "document_type": "invoice",
+        "issuer_name": vendor_name,
+        "total_amount": str(total_amount),
+        "currency": currency,
+        "manual_entry": True,
+        "notes": notes,
+    }
+
+    return create_invoice(
+        session,
+        document=doc,
+        vendor_name=vendor_name,
+        total_amount=total_amount,
+        raw_extraction=raw_extraction,
+        extracted_by_model="manual",
+        invoice_number=invoice_number,
+        invoice_date=invoice_date,
+        currency=currency,
+        category=category,
+        is_recurring=is_recurring,
+    )
+
+
+def generate_recurring_invoices(
+    session: Session,
+    *,
+    vendor_name: str,
+    amount: Decimal,
+    start_date: date,
+    end_date: date,
+    cadence_days: int = 30,
+    direction: str = "incoming",
+    currency: str = "USD",
+    category: str | None = None,
+    notes: str | None = None,
+) -> list[Invoice]:
+    """Create a series of identical recurring invoices between two dates."""
+    invoices = []
+    current = start_date
+    while current <= end_date:
+        inv = create_manual_invoice(
+            session,
+            vendor_name=vendor_name,
+            total_amount=amount,
+            direction=direction,
+            invoice_date=current,
+            currency=currency,
+            category=category,
+            is_recurring=True,
+            notes=notes,
+        )
+        invoices.append(inv)
+        current = date.fromordinal(current.toordinal() + cadence_days)
+    return invoices
+

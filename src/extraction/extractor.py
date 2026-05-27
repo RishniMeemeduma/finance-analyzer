@@ -211,3 +211,44 @@ def extract_invoice_from_pdf(pdf_path: Path, force_vision: bool = False) -> Extr
         model=model_used,
         path_used=path_used,
     )
+
+
+def extract_invoice_from_text(
+    text: str, source_label: str = "email"
+) -> ExtractionResult:
+    """
+    Extract an invoice from raw text (e.g. an email body).
+
+    No PDF, no vision - just text in, structured invoice out.
+    """
+    client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+
+    try:
+        tool_input, model_used = _call_claude_text(client, text)
+        path_used = "text-from-email"
+    except anthropic.APIError as e:
+        return ExtractionResult(
+            success=False, model="error", path_used="error",
+            error=f"Anthropic API error: {e}",
+        )
+    except Exception as e:
+        return ExtractionResult(
+            success=False, model="error", path_used="error",
+            error=f"Extraction error: {type(e).__name__}: {e}",
+        )
+
+    try:
+        validated = InvoiceExtraction.model_validate(tool_input)
+    except ValidationError as e:
+        return ExtractionResult(
+            success=False, raw_response=tool_input, model=model_used,
+            path_used=path_used, error=f"Validation failed: {e}",
+        )
+
+    if validated.is_invoice:
+        validated = correct_direction(validated)
+
+    return ExtractionResult(
+        success=True, data=validated, raw_response=tool_input,
+        model=model_used, path_used=path_used,
+    )

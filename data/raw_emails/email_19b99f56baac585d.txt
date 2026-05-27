@@ -1,0 +1,24 @@
+Hi ,
+
+Could you please generate *invoice number 000017* for the consulting work
+completed in January?
+
+Work Period:* January 1, 2026 to January 31, 2026*
+
+Services provided:
+- CubeSat tribometer calibration and performance testing
+- Bearing surface analysis using white light interferometry
+- ZARA gear wear mechanism characterization
+- Technical documentation and detailed reporting
+
+Total *hours worked: 12 hours*
+
+those highlighted things are necessary
+
+Best regards,
+REVOLV Space S.R.L
+Best regards,
+
+
+*Rishni Meemeduma*
+*CEO, InnovaOrbit*

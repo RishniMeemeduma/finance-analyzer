@@ -123,3 +123,66 @@ def save_pdf(content: bytes, filename: str, message_id: str, save_dir: Path) -> 
     output_path = save_dir / f"{message_id}__{safe_name}"
     output_path.write_bytes(content)
     return output_path
+
+
+def extract_message_body(message: dict) -> tuple[str, str]:
+    """
+    Extract the plaintext and HTML body of a Gmail message.
+
+    Returns (plaintext, html). Either may be empty string.
+    """
+    import base64
+
+    plaintext_parts = []
+    html_parts = []
+
+    def walk(part: dict):
+        mime_type = part.get("mimeType", "")
+        body = part.get("body", {})
+
+        if mime_type.startswith("multipart/"):
+            for sub in part.get("parts", []):
+                walk(sub)
+            return
+
+        data = body.get("data")
+        if not data:
+            return
+
+        try:
+            decoded = base64.urlsafe_b64decode(data).decode("utf-8", errors="replace")
+        except Exception:
+            return
+
+        if mime_type == "text/plain":
+            plaintext_parts.append(decoded)
+        elif mime_type == "text/html":
+            html_parts.append(decoded)
+
+    walk(message["payload"])
+    return "\n\n".join(plaintext_parts), "\n\n".join(html_parts)
+
+
+def html_to_text(html: str) -> str:
+    """Very basic HTML to text. Strips tags but keeps structure."""
+    import re
+    # Remove script and style blocks entirely
+    html = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", html, flags=re.DOTALL | re.IGNORECASE)
+    # Convert <br> and </p> to newlines
+    html = re.sub(r"<br\s*/?>", "\n", html, flags=re.IGNORECASE)
+    html = re.sub(r"</p\s*>", "\n\n", html, flags=re.IGNORECASE)
+    # Strip remaining tags
+    html = re.sub(r"<[^>]+>", "", html)
+    # Decode common HTML entities
+    html = (
+        html.replace("&nbsp;", " ")
+        .replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&quot;", '"')
+        .replace("&#39;", "'")
+    )
+    # Collapse whitespace
+    html = re.sub(r"\n\s*\n", "\n\n", html)
+    html = re.sub(r"[ \t]+", " ", html)
+    return html.strip()

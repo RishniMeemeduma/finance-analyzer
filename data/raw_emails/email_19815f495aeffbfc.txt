@@ -1,0 +1,7 @@
+Greetings from AWS, 
+
+There are upcoming changes in how you will be receiving your AWS Invoices starting 8/21/2025. As of 8/21/2025, you will receive all AWS invoices from “no-reply@tax-and-invoicing.us-east-1.amazonaws.com”. If you have automated rules configured to process invoice emails, please update the email address to “no-reply@tax-and-invoicing.us-east-1.amazonaws.com”.
+
+Sincerely, 
+
+The Amazon Web Services Team
