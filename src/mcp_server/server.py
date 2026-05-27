@@ -488,6 +488,47 @@ def add_recurring_invoices_tool(
         }
 
 
+@mcp.tool()
+def delete_invoice_tool(invoice_id: str) -> dict:
+    """
+    Delete an invoice by its ID.
+
+    Also deletes the associated document and any line items or anomalies
+    linked to the invoice (via cascade).
+
+    Args:
+        invoice_id: The invoice's UUID (as returned by search_invoices_tool).
+
+    Returns a dict with: success (bool), deleted_invoice (summary of what was deleted).
+    """
+    from src.storage.models import Document
+
+    with get_session() as session:
+        inv = get_invoice_by_id(session, UUID(invoice_id))
+        if not inv:
+            return {"success": False, "error": f"Invoice {invoice_id} not found"}
+
+        # Capture info before deletion
+        deleted_info = {
+            "id": str(inv.id),
+            "vendor": inv.vendor_name,
+            "invoice_number": inv.invoice_number,
+            "invoice_date": inv.invoice_date.isoformat() if inv.invoice_date else None,
+            "total_amount": str(inv.total_amount),
+            "currency": inv.currency,
+        }
+
+        # Delete the document (cascades to invoice, line_items, anomalies)
+        if inv.document_id:
+            doc = session.get(Document, inv.document_id)
+            if doc:
+                session.delete(doc)
+        else:
+            # No document, just delete the invoice directly
+            session.delete(inv)
+
+        return {"success": True, "deleted_invoice": deleted_info}
+
 
 if __name__ == "__main__":
     mcp.run()
