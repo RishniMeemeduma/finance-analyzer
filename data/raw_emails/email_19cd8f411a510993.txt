@@ -1,7 +1,0 @@
-Greetings from AWS, 
-
-There are upcoming changes to the AWS email address you receive your invoices from. Starting on March 25, 2026, you will receive all AWS invoices from “invoicing@aws.com”. If you have automated rules configured to process invoice emails, please update the email address to “invoicing@aws.com”.
-
-Sincerely, 
-
-The Amazon Web Services Team
